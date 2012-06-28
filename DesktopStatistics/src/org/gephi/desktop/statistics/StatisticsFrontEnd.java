@@ -57,7 +57,7 @@ import org.gephi.statistics.spi.StatisticsBuilder;
 import org.gephi.statistics.api.StatisticsController;
 import org.gephi.statistics.spi.DynamicStatistics;
 import org.gephi.statistics.spi.StatisticsUI;
-import org.gephi.ui.components.SimpleHTMLReport;
+import org.gephi.ui.components.JavaFxHTMLReport;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.longtask.api.LongTaskListener;
 import org.netbeans.validation.api.ui.ValidationPanel;
@@ -248,7 +248,8 @@ public class StatisticsFrontEnd extends javax.swing.JPanel {
             SwingUtilities.invokeLater(new Runnable() {
 
                 public void run() {
-                    SimpleHTMLReport dialog = new SimpleHTMLReport(WindowManager.getDefault().getMainWindow(), report);
+                    //SimpleHTMLReport dialog = new SimpleHTMLReport(WindowManager.getDefault().getMainWindow(), report);
+                    JavaFxHTMLReport dialog = new JavaFxHTMLReport(WindowManager.getDefault().getMainWindow(), false);
                 }
             });
         }
