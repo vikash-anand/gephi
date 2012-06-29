@@ -249,7 +249,8 @@ public class StatisticsFrontEnd extends javax.swing.JPanel {
 
                 public void run() {
                     //SimpleHTMLReport dialog = new SimpleHTMLReport(WindowManager.getDefault().getMainWindow(), report);
-                    JavaFxHTMLReport dialog = new JavaFxHTMLReport(WindowManager.getDefault().getMainWindow(), false);
+                    JavaFxHTMLReport dialog = new JavaFxHTMLReport(WindowManager.getDefault().getMainWindow(), report);
+                    dialog.setVisible(true);
                 }
             });
         }

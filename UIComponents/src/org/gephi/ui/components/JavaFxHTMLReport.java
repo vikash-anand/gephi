@@ -41,6 +41,17 @@ Contributor(s):
  */
 package org.gephi.ui.components;
 
+import java.awt.*;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.*;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.HPos;
@@ -56,40 +67,142 @@ import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.text.View;
+import org.openide.awt.StatusDisplayer;
+import org.openide.util.NbBundle;
+import org.openide.util.NbPreferences;
+import org.openide.windows.WindowManager;
 
 /**
  *
  * @author Vikash Anand
  */
-public class JavaFxHTMLReport extends javax.swing.JDialog {
+/*class ReportSelection implements Transferable {
+
+    private static ArrayList flavors = new ArrayList();
+
+    static {
+        try {
+            flavors.add(new DataFlavor("text/html;class=java.lang.String"));
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+    private String html;
+
+    /**
+     *
+     * @param html
+     */
+    /*public ReportSelection(String html) {
+        this.html = html;
+        String newHTML = new String();
+        String[] result = html.split("file:");
+        boolean first = true;
+        for (int i = 0; i < result.length; i++) {
+            if (result[i].contains("</IMG>")) {
+                String next = result[i];
+                //System.out.println(">  " + next);
+                String[] elements = next.split("\"");
+                String filename = elements[0];
+
+
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+                File file = new File(filename);
+                try {
+                    BufferedImage image = ImageIO.read(file);
+                    ImageIO.write((RenderedImage) image, "PNG", out);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                byte[] imageBytes = out.toByteArray();
+                String base64String = Base64.encodeBase64String(imageBytes);
+                if (!first) {
+
+                    newHTML += "\"";
+                }
+                first = false;
+                newHTML += "data:image/png;base64," + base64String;
+                for (int j = 1; j < elements.length; j++) {
+                    newHTML += "\"" + elements[j];
+                }
+            } else {
+                newHTML += result[i];
+            }
+        }
+        this.html = newHTML;
+    }
+
+    /**
+     *
+     * @return
+     */
+    /*public DataFlavor[] getTransferDataFlavors() {
+        return (DataFlavor[]) flavors.toArray(new DataFlavor[flavors.size()]);
+    }*/
+
+    /**
+     *
+     * @param flavor
+     * @return
+     */
+    /*public boolean isDataFlavorSupported(DataFlavor flavor) {
+        return flavors.contains(flavor);
+    }*/
+
+    /**
+     *
+     * @param flavor
+     * @return
+     * @throws java.awt.datatransfer.UnsupportedFlavorException
+     */
+    
+
+/*public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+        if (String.class.equals(flavor.getRepresentationClass())) {
+            return html;
+        }
+        throw new UnsupportedFlavorException(flavor);
+    }
+}*/
+
+
+public class JavaFxHTMLReport extends javax.swing.JDialog implements Printable {
 
     /**
      * Creates new form JavaFxHTMLReport
      */
-    public JavaFxHTMLReport(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    private String mHTMLReport;
+    public JavaFxHTMLReport(java.awt.Frame parent, String html) {
+        super(parent, false);
+        mHTMLReport = html;
         initComponents();
         final JFXPanel fxPanel = new JFXPanel();
         browserPanel.add(fxPanel);
-        setSize(700,600);
-        setTitle("JavaFxHTML Browser");
+        Dimension dimension = new Dimension(700, 600);
+        setPreferredSize(dimension);
+        setTitle("JavaFx HTML Report");
+        pack();
+        setLocationRelativeTo(parent);
         setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-            initFX(fxPanel);
+            initFX(fxPanel, mHTMLReport);
             }
        });
     }
     
-    private static void initFX(JFXPanel fxPanel) {
+    private static void initFX(JFXPanel fxPanel, String mHTMLReport) {
         // This method is invoked on the JavaFX thread
-        Scene scene = createScene();
+        Scene scene = createScene(mHTMLReport);
         fxPanel.setScene(scene);
     }
 
-    private static Scene createScene() {
-        Browser browser = new Browser();
+    private static Scene createScene(String mHTMLReport) {
+        Browser browser = new Browser(mHTMLReport);
         Scene scene = new Scene(browser,700,500, Color.web("#666970"));
         scene.getStylesheets().add("webviewsample/BrowserToolbar.css");  
         return (scene);
@@ -151,12 +264,13 @@ public class JavaFxHTMLReport extends javax.swing.JDialog {
         buttonPanelLayout.setHorizontalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(buttonPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(printButton)
                 .addGap(18, 18, 18)
                 .addComponent(copyButton)
                 .addGap(18, 18, 18)
                 .addComponent(saveButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 307, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addComponent(closeButton)
                 .addContainerGap())
         );
@@ -173,17 +287,7 @@ public class JavaFxHTMLReport extends javax.swing.JDialog {
         );
 
         browserPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        javax.swing.GroupLayout browserPanelLayout = new javax.swing.GroupLayout(browserPanel);
-        browserPanel.setLayout(browserPanelLayout);
-        browserPanelLayout.setHorizontalGroup(
-            browserPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        browserPanelLayout.setVerticalGroup(
-            browserPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 303, Short.MAX_VALUE)
-        );
+        browserPanel.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -195,7 +299,7 @@ public class JavaFxHTMLReport extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(browserPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(browserPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -204,24 +308,162 @@ public class JavaFxHTMLReport extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void copyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyButtonActionPerformed
-        // TODO add your handling code here:
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        try {
+            toolkit.getSystemClipboard().setContents(new ReportSelection(this.mHTMLReport), null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_copyButtonActionPerformed
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
-        // TODO add your handling code here:
+        /*PrinterJob pjob = PrinterJob.getPrinterJob();
+        PageFormat pf = pjob.defaultPage();
+        pjob.setPrintable(this, pf);
+
+        try {
+            if (pjob.printDialog()) {
+                pjob.print();
+            }
+        } catch (PrinterException e) {
+            e.printStackTrace();
+        }*/
     }//GEN-LAST:event_printButtonActionPerformed
 
+    private final String LAST_PATH = "SimpleHTMLReport_Save_Last_Path";
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_saveButtonActionPerformed
+        final String html = this.mHTMLReport;
 
+        final String path = NbPreferences.forModule(SimpleHTMLReport.class).get(LAST_PATH, null);
+        JFileChooser fileChooser = new JFileChooser(path);
+      //fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int result = fileChooser.showSaveDialog(WindowManager.getDefault().getMainWindow());
+        if (result == JFileChooser.APPROVE_OPTION) {
+            final File destinationFolder = fileChooser.getSelectedFile();
+            NbPreferences.forModule(SimpleHTMLReport.class).put(LAST_PATH, destinationFolder.getAbsolutePath());
+            Thread saveReportThread = new Thread(new Runnable() {
+
+                public void run() {
+                    try {
+                        saveReport(html, destinationFolder);
+                        StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(SimpleHTMLReport.class, "SimpleHTMLReport.status.saveSuccess", destinationFolder.getName()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, "SaveReportTask");
+            saveReportThread.start();
+
+        }
+    }//GEN-LAST:event_saveButtonActionPerformed
+    
+    private void saveReport(String html, File destinationFolder) throws IOException {
+        if (!destinationFolder.exists()) {
+            destinationFolder.mkdir();
+        }
+
+        //Find images location
+        String imgRegex = "<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>";
+        Pattern pattern = Pattern.compile(imgRegex, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(html);
+        StringBuffer replaceBuffer = new StringBuffer();
+        while (matcher.find()) {
+            String fileAbsolutePath = matcher.group(1);
+            if (fileAbsolutePath.startsWith("file:")) {
+                fileAbsolutePath = fileAbsolutePath.replaceFirst("file:", "");
+            }
+            File file = new File(fileAbsolutePath);
+            if (file.exists()) {
+                copy(file, destinationFolder);
+            }
+
+            //Replace temp path
+            matcher.appendReplacement(replaceBuffer, "<IMG SRC=\"" + file.getName() + "\">");
+        }
+        matcher.appendTail(replaceBuffer);
+
+        //Write HTML file
+        File htmlFile = new File(destinationFolder, "report.html");
+        FileOutputStream outputStream = new FileOutputStream(htmlFile);
+        OutputStreamWriter out = new OutputStreamWriter(outputStream, "UTF-8");
+        out.append(replaceBuffer.toString());
+        out.flush();
+        out.close();
+        outputStream.close();
+    } 
+    
+    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) {
+
+        /*boolean last = false;
+        try {
+
+            View rootView = displayPane.getUI().getRootView(displayPane);
+
+            double scaleX = pageFormat.getImageableWidth() / displayPane.getMinimumSize().getWidth();
+
+            scaleX = Math.min(scaleX, 1.0);
+            double scaleY = scaleX;
+
+            int end = (int) (pageIndex * ((1.0f / scaleY) * (double) pageFormat.getImageableHeight()));
+            Rectangle allocation = new Rectangle(0,
+                    -end,
+                    (int) pageFormat.getImageableWidth(),
+                    (int) pageFormat.getImageableHeight());
+            ((Graphics2D) graphics).scale(scaleX, scaleY);
+
+            graphics.setClip((int) (pageFormat.getImageableX() / scaleX),
+                    (int) (pageFormat.getImageableY() / scaleY),
+                    (int) (pageFormat.getImageableWidth() / scaleX),
+                    (int) (pageFormat.getImageableHeight() / scaleY));
+
+            ((Graphics2D) graphics).translate(((Graphics2D) graphics).getClipBounds().getX(),
+                    ((Graphics2D) graphics).getClipBounds().getY());
+
+            rootView.paint(graphics, allocation);
+
+            last = end > displayPane.getUI().getPreferredSize(displayPane).getHeight();
+
+            if ((last)) {
+                return Printable.NO_SUCH_PAGE;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+        return Printable.PAGE_EXISTS;
+    }
+    
+    public void copy(File source, File dest) throws IOException {
+        FileChannel in = null, out = null;
+        try {
+            if (dest.isDirectory()) {
+                dest = new File(dest, source.getName());
+            }
+            in = new FileInputStream(source).getChannel();
+            out = new FileOutputStream(dest).getChannel();
+
+            long size = in.size();
+            MappedByteBuffer buf = in.map(FileChannel.MapMode.READ_ONLY, 0, size);
+
+            out.write(buf);
+
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+        }
+    }
+    
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    /*
     public static void main(String args[]) {
         /*
          * Set the Nimbus look and feel
@@ -232,7 +474,7 @@ public class JavaFxHTMLReport extends javax.swing.JDialog {
          * default look and feel. For details see
          * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -253,10 +495,10 @@ public class JavaFxHTMLReport extends javax.swing.JDialog {
         /*
          * Create and display the dialog
          */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                JavaFxHTMLReport dialog = new JavaFxHTMLReport(new javax.swing.JFrame(), true);
+                JavaFxHTMLReport dialog = new JavaFxHTMLReport(new javax.swing.JFrame(), new String());
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                     @Override
@@ -267,7 +509,7 @@ public class JavaFxHTMLReport extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
-    }
+    }*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel browserPanel;
     private javax.swing.JPanel buttonPanel;
@@ -282,16 +524,13 @@ class Browser extends Region {
  
     final WebView browser = new WebView();
     final WebEngine webEngine = browser.getEngine();
-    TilePane tileButtons = new TilePane(Orientation.HORIZONTAL);
      
-    public Browser() {
+    public Browser(String mHTMLReport) {
         //apply the styles
-        System.out.println("inside browser");
         getStyleClass().add("browser");
         // load the web page
-        webEngine.load("http://www.google.com");
-        //add the web view to the scene 
-        //tileButtons.setPadding(new Insets(20, 10, 20, 0));
+        webEngine.loadContent(mHTMLReport);
+        //add the web view to the scene
         getChildren().add(browser);
  
     }
@@ -302,7 +541,7 @@ class Browser extends Region {
     }
  
     @Override protected void layoutChildren() {
-         double w = getWidth();
+        double w = getWidth();
         double h = getHeight();
         layoutInArea(browser,0,0,w,h,0, HPos.CENTER, VPos.CENTER);
     }
