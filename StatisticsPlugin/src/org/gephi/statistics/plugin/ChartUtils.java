@@ -97,7 +97,7 @@ public abstract class ChartUtils {
             final ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
             TempDir tempDir = TempDirUtils.createTempDir();
             File file1 = tempDir.createFile(fileName);
-            imageFile = "<IMG SRC=\"file:" + file1.getAbsolutePath() + "\" " + "WIDTH=\"600\" HEIGHT=\"400\" BORDER=\"0\" USEMAP=\"#chart\"></IMG>";
+            imageFile = "<IMG SRC=\"file://" + file1.getAbsolutePath() + "\" " + "WIDTH=\"600\" HEIGHT=\"400\" BORDER=\"0\" USEMAP=\"#chart\"></IMG>";
             ChartUtilities.saveChartAsPNG(file1, chart, 600, 400, info);
         } catch (IOException e) {
             System.out.println(e.toString());

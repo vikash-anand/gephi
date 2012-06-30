@@ -530,6 +530,7 @@ class Browser extends Region {
         getStyleClass().add("browser");
         // load the web page
         webEngine.loadContent(mHTMLReport);
+        System.out.println(mHTMLReport);
         //add the web view to the scene
         getChildren().add(browser);
  
