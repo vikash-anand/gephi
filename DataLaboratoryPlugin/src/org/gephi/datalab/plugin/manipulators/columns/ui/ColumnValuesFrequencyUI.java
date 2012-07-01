@@ -50,7 +50,7 @@ import org.gephi.datalab.spi.DialogControls;
 import org.gephi.datalab.spi.columns.AttributeColumnsManipulator;
 import org.gephi.datalab.spi.columns.AttributeColumnsManipulatorUI;
 import org.gephi.ui.components.JFreeChartDialog;
-import org.gephi.ui.components.SimpleHTMLReport;
+import org.gephi.ui.components.JavaFxHTMLReport;
 import org.jfree.chart.JFreeChart;
 import org.openide.windows.WindowManager;
 
@@ -66,7 +66,7 @@ public class ColumnValuesFrequencyUI extends javax.swing.JPanel implements Attri
     private Map<Object, Integer> valuesFrequencies;
     private JFreeChart pieChart;
     private JFreeChartDialog pieChartDialog;
-    private SimpleHTMLReport reportDialog;
+    private JavaFxHTMLReport reportDialog;
 
     /** Creates new form ColumnValuesFrequencyUI */
     public ColumnValuesFrequencyUI() {
@@ -174,7 +174,7 @@ public class ColumnValuesFrequencyUI extends javax.swing.JPanel implements Attri
         if (reportDialog != null) {
             reportDialog.dispose();
         }
-        reportDialog = new SimpleHTMLReport(WindowManager.getDefault().getMainWindow(), html);
+        reportDialog = new JavaFxHTMLReport(WindowManager.getDefault().getMainWindow(), html);
     }//GEN-LAST:event_showReportButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton configurePieChartButton;

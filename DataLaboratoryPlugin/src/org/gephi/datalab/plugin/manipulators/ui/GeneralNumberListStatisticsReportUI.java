@@ -51,7 +51,7 @@ import org.gephi.datalab.spi.ManipulatorUI;
 import org.gephi.datalab.spi.columns.AttributeColumnsManipulator;
 import org.gephi.datalab.spi.columns.AttributeColumnsManipulatorUI;
 import org.gephi.ui.components.JFreeChartDialog;
-import org.gephi.ui.components.SimpleHTMLReport;
+import org.gephi.ui.components.JavaFxHTMLReport;
 import org.gephi.ui.utils.ChartsUtils;
 import org.gephi.utils.StatisticsUtils;
 import org.jfree.chart.JFreeChart;
@@ -69,7 +69,7 @@ public class GeneralNumberListStatisticsReportUI extends javax.swing.JPanel impl
     private BigDecimal[] statistics;
     private JFreeChart boxPlot, scatterPlot, histogram;
     private JFreeChartDialog boxPlotDialog, scatterPlotDialog, histogramDialog;
-    private SimpleHTMLReport reportDialog;
+    private JavaFxHTMLReport reportDialog;
     private int histogramDivisions;
     private static final int MIN_HISTOGRAM_DIVISIONS = 1, MAX_HISTOGRAM_DIVISIONS = 50;
 
@@ -303,7 +303,7 @@ public class GeneralNumberListStatisticsReportUI extends javax.swing.JPanel impl
         if (reportDialog != null) {
             reportDialog.dispose();
         }
-        reportDialog = new SimpleHTMLReport(WindowManager.getDefault().getMainWindow(), html);
+        reportDialog = new JavaFxHTMLReport(WindowManager.getDefault().getMainWindow(), html);
     }//GEN-LAST:event_showReportButtonActionPerformed
 
     private void useLinesCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_useLinesCheckBoxActionPerformed

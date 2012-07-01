@@ -1,74 +1,75 @@
 /*
-Copyright 2008-2012 Gephi
-Authors : VIKASH ANAND <vikash.anand@gephi.org>
-Website : http://www.gephi.org
+ Copyright 2008-2012 Gephi
+ Authors : VIKASH ANAND <vikash.anand@gephi.org>
+ Website : http://www.gephi.org
 
-This file is part of Gephi.
+ This file is part of Gephi.
 
-DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-Copyright 2012 Gephi Consortium. All rights reserved.
+ Copyright 2012 Gephi Consortium. All rights reserved.
 
-The contents of this file are subject to the terms of either the GNU
-General Public License Version 3 only ("GPL") or the Common
-Development and Distribution License("CDDL") (collectively, the
-"License"). You may not use this file except in compliance with the
-License. You can obtain a copy of the License at
-http://gephi.org/about/legal/license-notice/
-or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
-specific language governing permissions and limitations under the
-License.  When distributing the software, include this License Header
-Notice in each file and include the License files at
-/cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
-License Header, with the fields enclosed by brackets [] replaced by
-your own identifying information:
-"Portions Copyrighted [year] [name of copyright owner]"
+ The contents of this file are subject to the terms of either the GNU
+ General Public License Version 3 only ("GPL") or the Common
+ Development and Distribution License("CDDL") (collectively, the
+ "License"). You may not use this file except in compliance with the
+ License. You can obtain a copy of the License at
+ http://gephi.org/about/legal/license-notice/
+ or /cddl-1.0.txt and /gpl-3.0.txt. See the License for the
+ specific language governing permissions and limitations under the
+ License.  When distributing the software, include this License Header
+ Notice in each file and include the License files at
+ /cddl-1.0.txt and /gpl-3.0.txt. If applicable, add the following below the
+ License Header, with the fields enclosed by brackets [] replaced by
+ your own identifying information:
+ "Portions Copyrighted [year] [name of copyright owner]"
 
-If you wish your version of this file to be governed by only the CDDL
-or only the GPL Version 3, indicate your decision by adding
-"[Contributor] elects to include this software in this distribution
-under the [CDDL or GPL Version 3] license." If you do not indicate a
-single choice of license, a recipient has the option to distribute
-your version of this file under either the CDDL, the GPL Version 3 or
-to extend the choice of license to its licensees as provided above.
-However, if you add GPL Version 3 code and therefore, elected the GPL
-Version 3 license, then the option applies only if the new code is
-made subject to such option by the copyright holder.
+ If you wish your version of this file to be governed by only the CDDL
+ or only the GPL Version 3, indicate your decision by adding
+ "[Contributor] elects to include this software in this distribution
+ under the [CDDL or GPL Version 3] license." If you do not indicate a
+ single choice of license, a recipient has the option to distribute
+ your version of this file under either the CDDL, the GPL Version 3 or
+ to extend the choice of license to its licensees as provided above.
+ However, if you add GPL Version 3 code and therefore, elected the GPL
+ Version 3 license, then the option applies only if the new code is
+ made subject to such option by the copyright holder.
 
-Contributor(s):
+ Contributor(s):
 
  Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.ui.components;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.*;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.HPos;
-import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javax.imageio.ImageIO;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.text.View;
+import org.apache.commons.codec.binary.Base64;
 import org.openide.awt.StatusDisplayer;
 import org.openide.util.NbBundle;
 import org.openide.util.NbPreferences;
@@ -78,7 +79,7 @@ import org.openide.windows.WindowManager;
  *
  * @author Vikash Anand
  */
-/*class ReportSelection implements Transferable {
+class ReportSelection implements Transferable {
 
     private static ArrayList flavors = new ArrayList();
 
@@ -95,7 +96,7 @@ import org.openide.windows.WindowManager;
      *
      * @param html
      */
-    /*public ReportSelection(String html) {
+    public ReportSelection(String html) {
         this.html = html;
         String newHTML = new String();
         String[] result = html.split("file:");
@@ -139,18 +140,18 @@ import org.openide.windows.WindowManager;
      *
      * @return
      */
-    /*public DataFlavor[] getTransferDataFlavors() {
+    public DataFlavor[] getTransferDataFlavors() {
         return (DataFlavor[]) flavors.toArray(new DataFlavor[flavors.size()]);
-    }*/
+    }
 
     /**
      *
      * @param flavor
      * @return
      */
-    /*public boolean isDataFlavorSupported(DataFlavor flavor) {
+    public boolean isDataFlavorSupported(DataFlavor flavor) {
         return flavors.contains(flavor);
-    }*/
+    }
 
     /**
      *
@@ -158,23 +159,21 @@ import org.openide.windows.WindowManager;
      * @return
      * @throws java.awt.datatransfer.UnsupportedFlavorException
      */
-    
-
-/*public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
         if (String.class.equals(flavor.getRepresentationClass())) {
             return html;
         }
         throw new UnsupportedFlavorException(flavor);
     }
-}*/
+}
 
-
-public class JavaFxHTMLReport extends javax.swing.JDialog implements Printable {
+public class JavaFxHTMLReport extends javax.swing.JDialog {
 
     /**
      * Creates new form JavaFxHTMLReport
      */
     private String mHTMLReport;
+
     public JavaFxHTMLReport(java.awt.Frame parent, String html) {
         super(parent, false);
         mHTMLReport = html;
@@ -187,24 +186,25 @@ public class JavaFxHTMLReport extends javax.swing.JDialog implements Printable {
         pack();
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
+        Platform.setImplicitExit(false);
         Platform.runLater(new Runnable() {
+
             @Override
             public void run() {
-            initFX(fxPanel, mHTMLReport);
+                initFX(fxPanel, mHTMLReport);
             }
-       });
+        });
     }
-    
+
     private static void initFX(JFXPanel fxPanel, String mHTMLReport) {
-        // This method is invoked on the JavaFX thread
         Scene scene = createScene(mHTMLReport);
         fxPanel.setScene(scene);
     }
 
     private static Scene createScene(String mHTMLReport) {
         Browser browser = new Browser(mHTMLReport);
-        Scene scene = new Scene(browser,700,500, Color.web("#666970"));
-        scene.getStylesheets().add("webviewsample/BrowserToolbar.css");  
+        Scene scene = new Scene(browser, 700, 500, Color.web("#666970"));
+        scene.getStylesheets().add("webviewsample/BrowserToolbar.css");
         return (scene);
     }
 
@@ -317,36 +317,23 @@ public class JavaFxHTMLReport extends javax.swing.JDialog implements Printable {
     }//GEN-LAST:event_copyButtonActionPerformed
 
     private void printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printButtonActionPerformed
-        /*PrinterJob pjob = PrinterJob.getPrinterJob();
-        PageFormat pf = pjob.defaultPage();
-        pjob.setPrintable(this, pf);
-
-        try {
-            if (pjob.printDialog()) {
-                pjob.print();
-            }
-        } catch (PrinterException e) {
-            e.printStackTrace();
-        }*/
     }//GEN-LAST:event_printButtonActionPerformed
-
     private final String LAST_PATH = "SimpleHTMLReport_Save_Last_Path";
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         final String html = this.mHTMLReport;
 
-        final String path = NbPreferences.forModule(SimpleHTMLReport.class).get(LAST_PATH, null);
+        final String path = NbPreferences.forModule(JavaFxHTMLReport.class).get(LAST_PATH, null);
         JFileChooser fileChooser = new JFileChooser(path);
-      //fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int result = fileChooser.showSaveDialog(WindowManager.getDefault().getMainWindow());
         if (result == JFileChooser.APPROVE_OPTION) {
             final File destinationFolder = fileChooser.getSelectedFile();
-            NbPreferences.forModule(SimpleHTMLReport.class).put(LAST_PATH, destinationFolder.getAbsolutePath());
+            NbPreferences.forModule(JavaFxHTMLReport.class).put(LAST_PATH, destinationFolder.getAbsolutePath());
             Thread saveReportThread = new Thread(new Runnable() {
 
                 public void run() {
                     try {
                         saveReport(html, destinationFolder);
-                        StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(SimpleHTMLReport.class, "SimpleHTMLReport.status.saveSuccess", destinationFolder.getName()));
+                        StatusDisplayer.getDefault().setStatusText(NbBundle.getMessage(JavaFxHTMLReport.class, "SimpleHTMLReport.status.saveSuccess", destinationFolder.getName()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -356,7 +343,7 @@ public class JavaFxHTMLReport extends javax.swing.JDialog implements Printable {
 
         }
     }//GEN-LAST:event_saveButtonActionPerformed
-    
+
     private void saveReport(String html, File destinationFolder) throws IOException {
         if (!destinationFolder.exists()) {
             destinationFolder.mkdir();
@@ -390,48 +377,8 @@ public class JavaFxHTMLReport extends javax.swing.JDialog implements Printable {
         out.flush();
         out.close();
         outputStream.close();
-    } 
-    
-    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) {
-
-        /*boolean last = false;
-        try {
-
-            View rootView = displayPane.getUI().getRootView(displayPane);
-
-            double scaleX = pageFormat.getImageableWidth() / displayPane.getMinimumSize().getWidth();
-
-            scaleX = Math.min(scaleX, 1.0);
-            double scaleY = scaleX;
-
-            int end = (int) (pageIndex * ((1.0f / scaleY) * (double) pageFormat.getImageableHeight()));
-            Rectangle allocation = new Rectangle(0,
-                    -end,
-                    (int) pageFormat.getImageableWidth(),
-                    (int) pageFormat.getImageableHeight());
-            ((Graphics2D) graphics).scale(scaleX, scaleY);
-
-            graphics.setClip((int) (pageFormat.getImageableX() / scaleX),
-                    (int) (pageFormat.getImageableY() / scaleY),
-                    (int) (pageFormat.getImageableWidth() / scaleX),
-                    (int) (pageFormat.getImageableHeight() / scaleY));
-
-            ((Graphics2D) graphics).translate(((Graphics2D) graphics).getClipBounds().getX(),
-                    ((Graphics2D) graphics).getClipBounds().getY());
-
-            rootView.paint(graphics, allocation);
-
-            last = end > displayPane.getUI().getPreferredSize(displayPane).getHeight();
-
-            if ((last)) {
-                return Printable.NO_SUCH_PAGE;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-        return Printable.PAGE_EXISTS;
     }
-    
+
     public void copy(File source, File dest) throws IOException {
         FileChannel in = null, out = null;
         try {
@@ -455,61 +402,10 @@ public class JavaFxHTMLReport extends javax.swing.JDialog implements Printable {
             }
         }
     }
-    
+
     private void closeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeButtonActionPerformed
         dispose();
     }//GEN-LAST:event_closeButtonActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    /*
-    public static void main(String args[]) {
-        /*
-         * Set the Nimbus look and feel
-         */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the
-         * default look and feel. For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        /*try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JavaFxHTMLReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JavaFxHTMLReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JavaFxHTMLReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JavaFxHTMLReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /*
-         * Create and display the dialog
-         */
-        /*java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                JavaFxHTMLReport dialog = new JavaFxHTMLReport(new javax.swing.JFrame(), new String());
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }*/
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel browserPanel;
     private javax.swing.JPanel buttonPanel;
@@ -521,37 +417,38 @@ public class JavaFxHTMLReport extends javax.swing.JDialog implements Printable {
 }
 
 class Browser extends Region {
- 
+
     final WebView browser = new WebView();
     final WebEngine webEngine = browser.getEngine();
-     
+
     public Browser(String mHTMLReport) {
-        //apply the styles
         getStyleClass().add("browser");
-        // load the web page
         webEngine.loadContent(mHTMLReport);
         System.out.println(mHTMLReport);
-        //add the web view to the scene
         getChildren().add(browser);
- 
+
     }
+
     private Node createSpacer() {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         return spacer;
     }
- 
-    @Override protected void layoutChildren() {
+
+    @Override
+    protected void layoutChildren() {
         double w = getWidth();
         double h = getHeight();
-        layoutInArea(browser,0,0,w,h,0, HPos.CENTER, VPos.CENTER);
+        layoutInArea(browser, 0, 0, w, h, 0, HPos.CENTER, VPos.CENTER);
     }
- 
-    @Override protected double computePrefWidth(double height) {
+
+    @Override
+    protected double computePrefWidth(double height) {
         return 750;
     }
- 
-    @Override protected double computePrefHeight(double width) {
+
+    @Override
+    protected double computePrefHeight(double width) {
         return 500;
     }
 }
