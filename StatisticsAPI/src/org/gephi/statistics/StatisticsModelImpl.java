@@ -56,6 +56,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 import org.apache.commons.codec.binary.Base64;
+import org.gephi.report.api.Report;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.statistics.api.StatisticsModel;
 import org.gephi.statistics.spi.StatisticsBuilder;
@@ -72,21 +73,21 @@ import org.openide.util.Lookup;
 public class StatisticsModelImpl implements StatisticsModel {
 
     //Model  
-    private final Map<Class, String> reportMap;
+    private final Map<Class, Report> reportMap;
 
     public StatisticsModelImpl() {
-        reportMap = new HashMap<Class, String>();
+        reportMap = new HashMap<Class, Report>();
     }
 
     public void addReport(Statistics statistics) {
         reportMap.put(statistics.getClass(), statistics.getReport());
     }
 
-    public String getReport(Class<? extends Statistics> statisticsClass) {
+    public Report getReport(Class<? extends Statistics> statisticsClass) {
         return reportMap.get(statisticsClass);
     }
 
-    public void writeXML(XMLStreamWriter writer) throws XMLStreamException {
+    /*public void writeXML(XMLStreamWriter writer) throws XMLStreamException {
         writer.writeStartElement("statisticsmodel");
 
         writer.writeStartElement("reports");
@@ -212,5 +213,5 @@ public class StatisticsModelImpl implements StatisticsModel {
             }
         }
         return builder.toString();
-    }
+    }*/
 }

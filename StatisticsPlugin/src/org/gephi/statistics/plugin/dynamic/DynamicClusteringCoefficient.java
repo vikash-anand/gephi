@@ -59,6 +59,8 @@ import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.GraphView;
 import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.Node;
+import org.gephi.report.api.Report;
+import org.gephi.report.api.ReportText;
 import org.gephi.statistics.plugin.ChartUtils;
 import org.gephi.statistics.plugin.ClusteringCoefficient;
 import org.gephi.statistics.spi.DynamicStatistics;
@@ -123,7 +125,7 @@ public class DynamicClusteringCoefficient implements DynamicStatistics, LongTask
         }
     }
 
-    public String getReport() {
+    /*public String getReport() {
         //Transform to Map
         Map<Double, Double> map = new HashMap<Double, Double>();
         for (Interval<Double> interval : averages.getIntervals()) {
@@ -164,7 +166,19 @@ public class DynamicClusteringCoefficient implements DynamicStatistics, LongTask
         /*for (Interval<Double> average : averages) {
         report += average.toString(dynamicModel.getTimeFormat().equals(DynamicModel.TimeFormat.DOUBLE)) + "<br />";
         }*/
-        report += "<br /><br /></BODY></HTML>";
+        /*report += "<br /><br /></BODY></HTML>";
+        return report;
+    }*/
+    
+    public Report getReport() {
+        
+        Report report = new Report();
+        report.setTitle("Dynamic Clustering Coefficient Report");
+        
+        ReportText algorithmDescription = new ReportText();
+        algorithmDescription.setHeading("Algorithm:");
+        algorithmDescription.setParagraph("Simple and slow brute force.");
+        
         return report;
     }
 

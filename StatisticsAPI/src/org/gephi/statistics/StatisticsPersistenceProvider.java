@@ -52,8 +52,8 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Mathieu Bastian
  */
-@ServiceProvider(service = WorkspacePersistenceProvider.class)
-public class StatisticsPersistenceProvider implements WorkspacePersistenceProvider {
+//@ServiceProvider(service = WorkspacePersistenceProvider.class)
+/*public class StatisticsPersistenceProvider implements WorkspacePersistenceProvider {
 
     public void writeXML(XMLStreamWriter writer, Workspace workspace) {
         StatisticsModelImpl statModel = workspace.getLookup().lookup(StatisticsModelImpl.class);
@@ -82,4 +82,4 @@ public class StatisticsPersistenceProvider implements WorkspacePersistenceProvid
     public String getIdentifier() {
         return "statisticsmodel";
     }
-}
+}*/

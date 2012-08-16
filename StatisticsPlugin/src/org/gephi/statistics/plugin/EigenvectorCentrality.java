@@ -42,7 +42,6 @@ Portions Copyrighted 2011 Gephi Consortium.
 package org.gephi.statistics.plugin;
 
 import java.util.HashMap;
-import java.util.Map;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.data.attributes.api.AttributeOrigin;
@@ -57,15 +56,12 @@ import org.gephi.graph.api.HierarchicalDirectedGraph;
 import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
+import org.gephi.report.api.Report;
+import org.gephi.report.api.ReportText;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 import org.openide.util.Lookup;
 
 /**
@@ -214,7 +210,7 @@ public class EigenvectorCentrality implements Statistics, LongTask {
      * 
      * @return
      */
-    public String getReport() {
+    /*public String getReport() {
         //distribution of values
         Map<Double, Integer> dist = new HashMap<Double, Integer>();
         for (int i = 0; i < centralities.length; i++) {
@@ -259,6 +255,14 @@ public class EigenvectorCentrality implements Statistics, LongTask {
 
         return report;
 
+    }*/
+    
+    public Report getReport() {
+        
+        Report report = new Report();
+        report.setTitle("Eigenvector Centrality Report");
+        
+        return report;
     }
 
     public boolean cancel() {

@@ -44,6 +44,7 @@ package org.gephi.statistics.spi;
 
 import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.graph.api.GraphModel;
+import org.gephi.report.api.Report;
 
 /**
  * Define a Statistics/Metrics execution task, that performs analysis and write results
@@ -69,5 +70,5 @@ public interface Statistics {
      * complex HTML snippets and images.
      * @return An HTML string that displays the results for this Statistics
      */
-    public String getReport();
+    public Report getReport();
 }

@@ -41,12 +41,12 @@ Portions Copyrighted 2011 Gephi Consortium.
 */
 package org.gephi.statistics.plugin;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.graph.api.GraphController;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.HierarchicalGraph;
+import org.gephi.report.api.Report;
+import org.gephi.report.api.ReportText;
 import org.gephi.statistics.spi.Statistics;
 import org.openide.util.Lookup;
 
@@ -103,7 +103,7 @@ public class GraphDensity implements Statistics {
      *
      * @return
      */
-    public String getReport() {
+    /*public String getReport() {
         NumberFormat f = new DecimalFormat("#0.000");
 
         return "<HTML> <BODY> <h1>Graph Density  Report </h1> "
@@ -114,5 +114,13 @@ public class GraphDensity implements Statistics {
                 + "<br> <h2> Results: </h2>"
                 + "Density: " + f.format(density)
                 + "</BODY></HTML>";
+    }*/
+    
+    public Report getReport() {
+        
+        Report report = new Report();
+        report.setTitle("Graph Density Report");
+        
+        return report;
     }
 }

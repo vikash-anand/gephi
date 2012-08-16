@@ -70,6 +70,8 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.openide.util.Lookup;
 import org.gephi.graph.api.NodeIterable;
+import org.gephi.report.api.Report;
+import org.gephi.report.api.ReportText;
 /**
  * Ref: Matthieu Latapy, Main-memory Triangle Computations for Very Large (Sparse (Power-Law)) Graphs,
  * in Theoretical Computer Science (TCS) 407 (1-3), pages 458-473, 2008
@@ -550,7 +552,7 @@ public class ClusteringCoefficient implements Statistics, LongTask {
     
     hgraph.readUnlockAll();
     }
-    public String getReport() {
+    /*public String getReport() {
         //distribution of values
         Map<Double, Integer> dist = new HashMap<Double, Integer>();
         for (int i = 0; i < N; i++) {
@@ -611,6 +613,17 @@ public class ClusteringCoefficient implements Statistics, LongTask {
                     + "Matthieu Latapy, <i>Main-memory Triangle Computations for Very Large (Sparse (Power-Law)) Graphs</i>, in Theoretical Computer Science (TCS) 407 (1-3), pages 458-473, 2008<br />"
                     + "</BODY> </HTML>";
        }
+    }*/
+    
+    public Report getReport() {
+        Report report = new Report();
+        report.setTitle("Clustering Coefficient Metric Report");
+        
+        ReportText algorithmDescription = new ReportText();
+        algorithmDescription.setHeading("Algorithm:");
+        algorithmDescription.setParagraph("Simple and slow brute force.");
+       
+        return report;
     }
 
     public void setDirected(boolean isDirected) {

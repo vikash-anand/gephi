@@ -55,6 +55,8 @@ import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.data.attributes.api.AttributeOrigin;
 import org.gephi.data.attributes.api.AttributeRow;
 import org.gephi.data.attributes.api.AttributeType;
+import org.gephi.report.api.Report;
+import org.gephi.report.api.ReportText;
 import org.gephi.utils.TempDirUtils;
 import org.gephi.utils.TempDirUtils.TempDir;
 import org.gephi.utils.longtask.spi.LongTask;
@@ -330,7 +332,7 @@ public class GraphDistance implements Statistics, LongTask {
      *
      * @return
      */
-    public String getReport() {
+    /*public String getReport() {
         String htmlIMG1 = "";
         String htmlIMG2 = "";
         String htmlIMG3 = "";
@@ -361,12 +363,25 @@ public class GraphDistance implements Statistics, LongTask {
                 + "</BODY> </HTML>";
 
         return report;
-    }
+    }*/
 
     /**
      * 
      * @return
      */
+    
+    public Report getReport() {
+        
+        Report report = new Report();
+        report.setTitle("Graph Distance Report");
+        
+        ReportText algorithmDescription = new ReportText();
+        algorithmDescription.setHeading("Algorithm:");
+        algorithmDescription.setParagraph("Ulrik Brandes, A Faster Algorithm for Betweenness Centrality, in Journal of Mathematical Sociology 25(2):163-177, (2001)");
+        
+        return report;
+    }
+    
     public boolean cancel() {
         this.isCanceled = true;
         return true;

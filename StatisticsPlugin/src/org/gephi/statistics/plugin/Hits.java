@@ -58,6 +58,8 @@ import org.gephi.graph.api.HierarchicalDirectedGraph;
 import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
+import org.gephi.report.api.Report;
+import org.gephi.report.api.ReportText;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -262,7 +264,7 @@ public class Hits implements Statistics, LongTask {
      *
      * @return
      */
-    public String getReport() {
+    /*public String getReport() {
         //distribution of hub values
         Map<Double, Integer> distHubs = new HashMap<Double, Integer>();
         for (Node node : hub_list) {
@@ -340,6 +342,18 @@ public class Hits implements Statistics, LongTask {
                 + "Jon M. Kleinberg, <i>Authoritative Sources in a Hyperlinked Environment</i>, in Journal of the ACM 46 (5): 604–632 (1999)<br />"
                 + "</BODY> </HTML>";
 
+        return report;
+    }*/
+    
+    public Report getReport() {
+        
+        Report report = new Report();
+        report.setTitle("HITS Metric Report");
+        
+        ReportText algorithmDescription = new ReportText();
+        algorithmDescription.setHeading("Algorithm:");
+        algorithmDescription.setParagraph("Jon M. Kleinberg, Authoritative Sources in a Hyperlinked Environment, in Journal of the ACM 46 (5): 604–632 (1999)");
+        
         return report;
     }
 

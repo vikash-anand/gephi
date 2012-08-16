@@ -62,6 +62,8 @@ import org.gephi.graph.api.HierarchicalDirectedGraph;
 import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
+import org.gephi.report.api.Report;
+import org.gephi.report.api.ReportText;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -296,7 +298,7 @@ public class ConnectedComponents implements Statistics, LongTask {
         return maxIndex;
     }
 
-    public String getReport() {
+    /*public String getReport() {
         Map<Integer, Integer> sizeDist = new HashMap<Integer, Integer>();
         for(int v : componentsSize) {
             if(!sizeDist.containsKey(v)) {
@@ -341,6 +343,18 @@ public class ConnectedComponents implements Statistics, LongTask {
                 + "Robert Tarjan, <i>Depth-First Search and Linear Graph Algorithms</i>, in SIAM Journal on Computing 1 (2): 146–160 (1972)<br />"
                 + "</BODY> </HTML>";
 
+        return report;
+    }*/
+    
+    public Report getReport() {
+        
+        Report report = new Report();
+        report.setTitle("Connected Components Report");
+        
+        ReportText algorithmDescription = new ReportText();
+        algorithmDescription.setHeading("Algorithm:");
+        algorithmDescription.setParagraph("Robert Tarjan, Depth-First Search and Linear Graph Algorithms, in SIAM Journal on Computing 1 (2): 146–160 (1972)");
+        
         return report;
     }
 

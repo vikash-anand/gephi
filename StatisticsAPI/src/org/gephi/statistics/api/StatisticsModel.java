@@ -42,6 +42,7 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.statistics.api;
 
+import org.gephi.report.api.Report;
 import org.gephi.statistics.spi.Statistics;
 
 /**
@@ -58,5 +59,5 @@ public interface StatisticsModel {
      * @param statistics        a statistics class
      * @return                  the report or <code>null</code> if not found
      */
-    public String getReport(Class<? extends Statistics> statistics);
+    public Report getReport(Class<? extends Statistics> statistics);
 }
