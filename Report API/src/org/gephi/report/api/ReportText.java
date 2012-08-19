@@ -71,7 +71,8 @@ public class ReportText implements ReportComponent{
     
     @Override
     public String getHTMLString() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String reportText = "<br /><br />"+"<h2>"+textHeading+"</h2"+textParagraph;
+        return reportText;
     }
     
 }

@@ -48,6 +48,8 @@ import org.gephi.data.attributes.api.*;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
+import org.gephi.report.api.Report;
+import org.gephi.report.api.ReportText;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -517,7 +519,7 @@ public class Modularity implements Statistics, LongTask {
         return modularity;
     }
 
-    public String getReport() {
+    /*public String getReport() {
         //Distribution series
         Map<Integer, Integer> sizeDist = new HashMap<Integer, Integer>();
         for(Node n : structure.graph.getNodes()) {
@@ -566,6 +568,24 @@ public class Modularity implements Statistics, LongTask {
                 + "R. Lambiotte, J.-C. Delvenne, M. Barahona <i>Laplacian Dynamics and Multiscale Modular Structure in Networks 2009<br />"
                 + "</BODY> </HTML>";
 
+        return report;
+    }*/
+    
+    public Report getReport() {
+        
+        Report report = new Report();
+        report.setTitle("HITS Metric Report");
+        
+        
+        
+        ReportText algorithmDescription = new ReportText();
+        algorithmDescription.setHeading("Algorithm:");
+        algorithmDescription.setParagraph("Vincent D Blondel, Jean-Loup Guillaume, Renaud Lambiotte, Etienne Lefebvre, Fast unfolding of communities in large networks, in Journal of Statistical Mechanics: Theory and Experiment 2008 (10), P1000");
+        
+        ReportText resolutionText = new ReportText();
+        resolutionText.setHeading("Resolution");
+        resolutionText.setParagraph("R. Lambiotte, J.-C. Delvenne, M. Barahona Laplacian Dynamics and Multiscale Modular Structure in Networks 2009");
+        
         return report;
     }
 

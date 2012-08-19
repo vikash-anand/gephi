@@ -41,10 +41,6 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.statistics.plugin.dynamic;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Map;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeModel;
 import org.gephi.data.attributes.api.AttributeOrigin;
@@ -55,13 +51,9 @@ import org.gephi.data.attributes.type.Interval;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.GraphView;
 import org.gephi.graph.api.HierarchicalGraph;
-import org.gephi.statistics.plugin.ChartUtils;
+import org.gephi.report.api.Report;
+import org.gephi.report.api.ReportText;
 import org.gephi.statistics.spi.DynamicStatistics;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 import org.openide.util.NbBundle;
 
 /**
@@ -93,7 +85,7 @@ public class DynamicNbNodes implements DynamicStatistics {
         graphModel.getGraphVisible().getAttributes().setValue(nbNodesCol.getIndex(), counts);
     }
 
-    public String getReport() {
+    /*public String getReport() {
         //Transform to Map
         Map<Double, Integer> map = new HashMap<Double, Integer>();
         for (Interval<Integer> interval : counts.getIntervals()) {
@@ -134,7 +126,15 @@ public class DynamicNbNodes implements DynamicStatistics {
         /*for (Interval<Integer> count : counts) {
         report += count.toString(dynamicModel.getTimeFormat().equals(DynamicModel.TimeFormat.DOUBLE)) + "<br />";
         }*/
-        report += "<br /><br /></BODY></HTML>";
+        /*report += "<br /><br /></BODY></HTML>";
+        return report;
+    }*/
+    
+    public Report getReport() {
+        
+        Report report = new Report();
+        report.setTitle("Dynamic Number of Nodes Report");
+        
         return report;
     }
 

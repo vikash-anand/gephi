@@ -55,6 +55,8 @@ import org.gephi.data.attributes.type.Interval;
 import org.gephi.graph.api.GraphModel;
 import org.gephi.graph.api.GraphView;
 import org.gephi.graph.api.HierarchicalGraph;
+import org.gephi.report.api.Report;
+import org.gephi.report.api.ReportText;
 import org.gephi.statistics.plugin.ChartUtils;
 import org.gephi.statistics.spi.DynamicStatistics;
 import org.jfree.chart.ChartFactory;
@@ -91,7 +93,7 @@ public class DynamicNbEdges implements DynamicStatistics {
         }
     }
 
-    public String getReport() {
+    /*public String getReport() {
         //Transform to Map
         Map<Double, Integer> map = new HashMap<Double, Integer>();
         for(Interval<Integer> interval : counts.getIntervals()) {
@@ -132,7 +134,15 @@ public class DynamicNbEdges implements DynamicStatistics {
         /*for (Interval<Integer> count : counts) {
         report += count.toString(dynamicModel.getTimeFormat().equals(DynamicModel.TimeFormat.DOUBLE)) + "<br />";
         }*/
-        report += "<br /><br /></BODY></HTML>";
+        /*report += "<br /><br /></BODY></HTML>";
+        return report;
+    }*/
+    
+    public Report getReport() {
+        
+        Report report = new Report();
+        report.setTitle("Dynamic Number of Edges Report");
+        
         return report;
     }
 
