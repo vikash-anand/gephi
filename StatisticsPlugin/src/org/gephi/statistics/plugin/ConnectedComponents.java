@@ -64,6 +64,7 @@ import org.gephi.graph.api.Node;
 import org.gephi.graph.api.NodeIterable;
 import org.gephi.report.api.Report;
 import org.gephi.report.api.ReportText;
+import org.gephi.report.api.ScatterPlot;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -347,9 +348,20 @@ public class ConnectedComponents implements Statistics, LongTask {
     }*/
     
     public Report getReport() {
+        Map<Integer, Integer> sizeDist = new HashMap<Integer, Integer>();
+        for(int v : componentsSize) {
+            if(!sizeDist.containsKey(v)) {
+                sizeDist.put(v, 0);
+            }
+            sizeDist.put(v, sizeDist.get(v) + 1);
+        }
         
         Report report = new Report();
         report.setTitle("Connected Components Report");
+        
+        ScatterPlot plot = new ScatterPlot();
+        plot.setAxisTitle("Size (number of nodes)", "Count");
+        plot.writePointCoordinates(sizeDist);
         
         ReportText algorithmDescription = new ReportText();
         algorithmDescription.setHeading("Algorithm:");

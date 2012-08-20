@@ -42,6 +42,7 @@ Portions Copyrighted 2011 Gephi Consortium.
 package org.gephi.statistics.plugin;
 
 import java.util.HashMap;
+import java.util.Map;
 import org.gephi.data.attributes.api.AttributeTable;
 import org.gephi.data.attributes.api.AttributeColumn;
 import org.gephi.data.attributes.api.AttributeModel;
@@ -58,6 +59,7 @@ import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
 import org.gephi.report.api.Report;
 import org.gephi.report.api.ReportText;
+import org.gephi.report.api.ScatterPlot;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -290,6 +292,20 @@ public class PageRank implements Statistics, LongTask {
     }*/
     
     public Report getReport() {
+        Map<Double, Integer> dist = new HashMap<Double, Integer>();
+        for (int i = 0; i < pageranks.length; i++) {
+            Double d = pageranks[i];
+            if (dist.containsKey(d)) {
+                Integer v = dist.get(d);
+                dist.put(d, v + 1);
+            } else {
+                dist.put(d, 1);
+            }
+        }
+        
+        ScatterPlot plot = new ScatterPlot();
+        plot.setAxisTitle("Score", "Count");
+        plot.writePointCoordinates(dist);
         
         Report report = new Report();
         report.setTitle("PageRank Report");

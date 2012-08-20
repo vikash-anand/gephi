@@ -41,8 +41,6 @@ Portions Copyrighted 2011 Gephi Consortium.
 */
 package org.gephi.statistics.plugin;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.*;
 import org.gephi.data.attributes.api.*;
 import org.gephi.graph.api.GraphModel;
@@ -50,15 +48,11 @@ import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
 import org.gephi.report.api.Report;
 import org.gephi.report.api.ReportText;
+import org.gephi.report.api.ScatterPlot;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  *
@@ -573,10 +567,21 @@ public class Modularity implements Statistics, LongTask {
     
     public Report getReport() {
         
+        Map<Integer, Integer> sizeDist = new HashMap<Integer, Integer>();
+        for(Node n : structure.graph.getNodes()) {
+            Integer v = (Integer) n.getNodeData().getAttributes().getValue(MODULARITY_CLASS);
+            if(!sizeDist.containsKey(v)) {
+                sizeDist.put(v, 0);
+            }
+            sizeDist.put(v, sizeDist.get(v) + 1);
+        }
+        
         Report report = new Report();
         report.setTitle("HITS Metric Report");
         
-        
+        ScatterPlot plot = new ScatterPlot();
+        plot.setAxisTitle("Modularity Class", "Size(Number of Nodes)");
+        plot.writePointCoordinates(sizeDist);
         
         ReportText algorithmDescription = new ReportText();
         algorithmDescription.setHeading("Algorithm:");

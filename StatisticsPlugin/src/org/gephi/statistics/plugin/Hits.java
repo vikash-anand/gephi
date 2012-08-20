@@ -60,6 +60,7 @@ import org.gephi.graph.api.HierarchicalUndirectedGraph;
 import org.gephi.graph.api.Node;
 import org.gephi.report.api.Report;
 import org.gephi.report.api.ReportText;
+import org.gephi.report.api.ScatterPlot;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -346,6 +347,38 @@ public class Hits implements Statistics, LongTask {
     }*/
     
     public Report getReport() {
+        Map<Double, Integer> distHubs = new HashMap<Double, Integer>();
+        for (Node node : hub_list) {
+            int n_index = indicies.get(node);
+            Double d = hubs[n_index];
+            if (distHubs.containsKey(d)) {
+                Integer v = distHubs.get(d);
+                distHubs.put(d, v + 1);
+            } else {
+                distHubs.put(d, 1);
+            }
+        }
+        
+        Map<Double, Integer> distAuthorities = new HashMap<Double, Integer>();
+        for (Node node : auth_list) {
+            int n_index = indicies.get(node);
+            Double d = authority[n_index];
+            if (distAuthorities.containsKey(d)) {
+                Integer v = distAuthorities.get(d);
+                distAuthorities.put(d, v + 1);
+            } else {
+                distAuthorities.put(d, 1);
+            }
+        }
+        
+        ScatterPlot plot1 = new ScatterPlot();
+        plot1.setAxisTitle("Score", "Count");
+        plot1.writePointCoordinates(distHubs);
+        
+        ScatterPlot plot2 = new ScatterPlot();
+        plot2.setAxisTitle("Score", "Count");
+        plot2.writePointCoordinates(distAuthorities);
+        
         
         Report report = new Report();
         report.setTitle("HITS Metric Report");

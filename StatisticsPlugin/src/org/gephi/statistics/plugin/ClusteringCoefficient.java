@@ -41,8 +41,6 @@ Portions Copyrighted 2011 Gephi Consortium.
  */
 package org.gephi.statistics.plugin;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -63,15 +61,11 @@ import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
 import org.gephi.utils.progress.ProgressTicket;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 import org.openide.util.Lookup;
 import org.gephi.graph.api.NodeIterable;
 import org.gephi.report.api.Report;
 import org.gephi.report.api.ReportText;
+import org.gephi.report.api.ScatterPlot;
 /**
  * Ref: Matthieu Latapy, Main-memory Triangle Computations for Very Large (Sparse (Power-Law)) Graphs,
  * in Theoretical Computer Science (TCS) 407 (1-3), pages 458-473, 2008
@@ -616,8 +610,23 @@ public class ClusteringCoefficient implements Statistics, LongTask {
     }*/
     
     public Report getReport() {
+        Map<Double, Integer> dist = new HashMap<Double, Integer>();
+        for (int i = 0; i < N; i++) {
+            Double d = nodeClustering[i];
+            if (dist.containsKey(d)) {
+                Integer v = dist.get(d);
+                dist.put(d, v + 1);
+            } else {
+                dist.put(d, 1);
+            }
+        }
+        
         Report report = new Report();
         report.setTitle("Clustering Coefficient Metric Report");
+        
+        ScatterPlot plot = new ScatterPlot();
+        plot.setAxisTitle("Value", "Count");
+        plot.writePointCoordinates(dist);
         
         ReportText algorithmDescription = new ReportText();
         algorithmDescription.setHeading("Algorithm:");

@@ -49,9 +49,9 @@ import java.util.Map;
  * @author Vikash Anand
  */
 public abstract class ReportChart implements ReportComponent {
-    private String xAxisTitle;
-    private String yAxisTitle;
-    Map <Integer,Integer> pointCoordinates = new HashMap<Integer,Integer>();
+    protected String xAxisTitle;
+    protected String yAxisTitle;
+    protected Map <Integer,Integer> pointCoordinates = new HashMap<Integer,Integer>();
     
     /**
      * Sets the name of X and Y Axes.

@@ -60,6 +60,7 @@ import org.gephi.graph.api.HierarchicalGraph;
 import org.gephi.graph.api.Node;
 import org.gephi.report.api.Report;
 import org.gephi.report.api.ReportText;
+import org.gephi.report.api.ScatterPlot;
 import org.gephi.statistics.spi.Statistics;
 import org.gephi.utils.longtask.spi.LongTask;
 import org.gephi.utils.progress.Progress;
@@ -220,11 +221,28 @@ public class WeightedDegree implements Statistics, LongTask {
         
         Report report = new Report();
         report.setTitle("Weighted Degree Report");
+        if(isDirected) {
+            ScatterPlot plot1 = new ScatterPlot();
+            plot1.setAxisTitle("Value", "Count");
+            plot1.writePointCoordinates(degreeDist);
+            
+            ScatterPlot plot2 = new ScatterPlot();
+            plot2.setAxisTitle("Value", "Count");
+            plot2.writePointCoordinates(inDegreeDist);
+            
+            ScatterPlot plot3 = new ScatterPlot();
+            plot3.setAxisTitle("Value", "Count");
+            plot3.writePointCoordinates(outDegreeDist);
+        }
+        ScatterPlot plot = new ScatterPlot();
+        plot.setAxisTitle("Value", "Count");
+        plot.writePointCoordinates(degreeDist);
+        
         
         return report;
     }
 
-    public String getDirectedReport() {
+    /*public String getDirectedReport() {
         //Distribution series
         XYSeries dSeries = ChartUtils.createXYSeries(degreeDist, "Degree Distribution");
         XYSeries idSeries = ChartUtils.createXYSeries(inDegreeDist, "In-Degree Distribution");
@@ -290,7 +308,7 @@ public class WeightedDegree implements Statistics, LongTask {
                 + "</BODY></HTML>";
 
         return report;
-    }
+    }*/
 
     public boolean cancel() {
         this.isCanceled = true;
