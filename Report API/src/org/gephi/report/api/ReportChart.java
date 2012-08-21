@@ -51,6 +51,7 @@ import java.util.Map;
 public abstract class ReportChart implements ReportComponent {
     protected String xAxisTitle;
     protected String yAxisTitle;
+    protected String chartTitle;
     protected Map <Integer,Integer> pointCoordinates = new HashMap<Integer,Integer>();
     
     /**
@@ -61,6 +62,12 @@ public abstract class ReportChart implements ReportComponent {
      * @param yAxisTitle 
      */
     abstract void setAxisTitle(String xAxisTitle, String yAxisTitle);
+    
+    /**
+     * Sets title of the Statistics Chart
+     * @param chartTitle 
+     */
+    abstract void setChartTitle(String chartTitle);
     
     /**
      * Writes the coordinates to the HashMap pointCoordinates.

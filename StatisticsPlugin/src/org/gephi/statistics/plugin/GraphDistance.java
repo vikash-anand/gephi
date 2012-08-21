@@ -294,7 +294,7 @@ public class GraphDistance implements Statistics, LongTask {
         return isDirected;
     }
 
-    private String createImageFile(TempDir tempDir, double[] pVals, String pName, String pX, String pY) {
+    /*private String createImageFile(TempDir tempDir, double[] pVals, String pName, String pX, String pY) {
         //distribution of values
         Map<Double, Integer> dist = new HashMap<Double, Integer>();
         for (int i = 0; i < N; i++) {
@@ -326,7 +326,7 @@ public class GraphDistance implements Statistics, LongTask {
         ChartUtils.decorateChart(chart);
         ChartUtils.scaleChart(chart, dSeries, isNormalized);
         return ChartUtils.renderChart(chart, pName + ".png");
-    }
+    }*/
 
     /**
      *
