@@ -582,6 +582,7 @@ public class Modularity implements Statistics, LongTask {
         ScatterPlot plot = new ScatterPlot();
         plot.setAxisTitle("Modularity Class", "Size(Number of Nodes)");
         plot.writePointCoordinates(sizeDist);
+        plot.setChartTitle("Size Distribution");
         
         ReportText algorithmDescription = new ReportText();
         algorithmDescription.setHeading("Algorithm:");

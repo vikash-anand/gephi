@@ -627,6 +627,7 @@ public class ClusteringCoefficient implements Statistics, LongTask {
         ScatterPlot plot = new ScatterPlot();
         plot.setAxisTitle("Value", "Count");
         plot.writePointCoordinates(dist);
+        plot.setChartTitle("Clustering Coefficient Distribution");
         
         ReportText algorithmDescription = new ReportText();
         algorithmDescription.setHeading("Algorithm:");

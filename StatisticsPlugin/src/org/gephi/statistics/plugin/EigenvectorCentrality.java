@@ -274,6 +274,7 @@ public class EigenvectorCentrality implements Statistics, LongTask {
         ScatterPlot plot = new ScatterPlot();
         plot.setAxisTitle("Score", "Count");
         plot.writePointCoordinates(dist);
+        plot.setChartTitle("Eigenvector Centrality Distribution");
         
         Report report = new Report();
         report.setTitle("Eigenvector Centrality Report");

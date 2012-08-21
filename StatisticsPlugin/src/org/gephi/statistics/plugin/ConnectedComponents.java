@@ -362,6 +362,7 @@ public class ConnectedComponents implements Statistics, LongTask {
         ScatterPlot plot = new ScatterPlot();
         plot.setAxisTitle("Size (number of nodes)", "Count");
         plot.writePointCoordinates(sizeDist);
+        plot.setChartTitle("Size Distribution");
         
         ReportText algorithmDescription = new ReportText();
         algorithmDescription.setHeading("Algorithm:");

@@ -374,10 +374,12 @@ public class Hits implements Statistics, LongTask {
         ScatterPlot plot1 = new ScatterPlot();
         plot1.setAxisTitle("Score", "Count");
         plot1.writePointCoordinates(distHubs);
+        plot1.setChartTitle("Hubs Distribution");
         
         ScatterPlot plot2 = new ScatterPlot();
         plot2.setAxisTitle("Score", "Count");
         plot2.writePointCoordinates(distAuthorities);
+        plot1.setChartTitle("Authority Distribution");
         
         
         Report report = new Report();

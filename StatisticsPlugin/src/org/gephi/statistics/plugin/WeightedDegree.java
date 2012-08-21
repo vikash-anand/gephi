@@ -225,18 +225,22 @@ public class WeightedDegree implements Statistics, LongTask {
             ScatterPlot plot1 = new ScatterPlot();
             plot1.setAxisTitle("Value", "Count");
             plot1.writePointCoordinates(degreeDist);
+            plot1.setChartTitle("Degree Distribution");
             
             ScatterPlot plot2 = new ScatterPlot();
             plot2.setAxisTitle("Value", "Count");
             plot2.writePointCoordinates(inDegreeDist);
+            plot2.setChartTitle("In-Degree Distribution");
             
             ScatterPlot plot3 = new ScatterPlot();
             plot3.setAxisTitle("Value", "Count");
             plot3.writePointCoordinates(outDegreeDist);
+            plot3.setChartTitle("Out-Degree Distribution");
         }
         ScatterPlot plot = new ScatterPlot();
         plot.setAxisTitle("Value", "Count");
         plot.writePointCoordinates(degreeDist);
+        plot.setChartTitle("Degree Distribution");
         
         
         return report;

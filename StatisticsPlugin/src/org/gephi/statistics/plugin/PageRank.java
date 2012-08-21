@@ -306,6 +306,7 @@ public class PageRank implements Statistics, LongTask {
         ScatterPlot plot = new ScatterPlot();
         plot.setAxisTitle("Score", "Count");
         plot.writePointCoordinates(dist);
+        plot.setChartTitle("PageRank Distribution");
         
         Report report = new Report();
         report.setTitle("PageRank Report");

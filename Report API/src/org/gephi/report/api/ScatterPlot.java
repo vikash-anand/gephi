@@ -65,7 +65,7 @@ public class ScatterPlot extends ReportChart {
     }
 
     @Override
-    void setChartTitle(String chartTitle) {
+    public void setChartTitle(String chartTitle) {
         this.chartTitle = chartTitle;
     }
     
